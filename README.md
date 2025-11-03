@@ -103,7 +103,7 @@ UIMA connects to the following backend API:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/teddykavooh/UIMA.git
+   git clone https://github.com/Teddykavooh/UIMA.git
    cd UIMA
 
 2. **Open in Android Studio**
