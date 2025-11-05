@@ -25,8 +25,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gap="12dp">
+            android:layout_height="wrap_content">
 
             <!-- First Name -->
             <com.google.android.material.textfield.TextInputLayout
@@ -119,8 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:weightSum="2"
-                android:gap="8dp">
+                android:weightSum="2">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnClose"
@@ -141,6 +139,17 @@
                     android:textColor="?attr/colorOnPrimary" />
 
             </LinearLayout>
+
+            <!-- Sync Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Sync"
+                app:icon="@drawable/outline_cloud_sync_24"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary" />
 
         </LinearLayout>
     </ScrollView>

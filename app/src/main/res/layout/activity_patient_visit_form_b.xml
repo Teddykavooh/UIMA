@@ -23,10 +23,9 @@
         android:padding="16dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gap="12dp">
+            android:orientation="vertical">
 
             <!-- Patient Name -->
             <com.google.android.material.textfield.TextInputLayout
@@ -165,8 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:weightSum="2"
-                android:gap="8dp">
+                android:weightSum="2">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnClose"

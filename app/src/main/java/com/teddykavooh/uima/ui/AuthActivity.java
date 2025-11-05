@@ -1,5 +1,6 @@
 package com.teddykavooh.uima.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -126,7 +127,10 @@ public class AuthActivity extends AppCompatActivity {
                     LoginResponse loginResponse = response.body();
                     Toast.makeText(AuthActivity.this, "Welcome " + loginResponse.getData().getName(), Toast.LENGTH_SHORT).show();
 
-                    // TODO: Navigate to main patient list activity
+                    // Navigate to patient list activity
+                    Intent intent = new Intent(AuthActivity.this, PatientListingActivity.class);
+                    startActivity(intent);
+
 
                     // Save token after success
                     token = loginResponse.getData().getAccess_token();

@@ -25,8 +25,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gap="12dp">
+            android:layout_height="wrap_content">
 
             <!-- Patient Name -->
             <com.google.android.material.textfield.TextInputLayout
@@ -68,8 +67,7 @@
                 android:id="@+id/rgGeneralHealth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gap="16dp">
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/rbGood"
@@ -98,8 +96,7 @@
                 android:id="@+id/rgOnDiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gap="16dp">
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/rbDietYes"
@@ -163,8 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:weightSum="2"
-                android:gap="8dp">
+                android:weightSum="2">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnClose"
