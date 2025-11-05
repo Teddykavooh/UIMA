@@ -131,7 +131,7 @@ UIMA connects to the following backend API:
 - Run unit tests for local logic using:
     ```bash
     ./gradlew test
-- Tests cover:
+- Tests cover(TODO):
     - BMI calculation
     - Form validation
     - Data persistence in Room (in-memory tests)
