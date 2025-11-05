@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Darker base colors for night mode -->
+    <color name="colorPrimary">#004D40</color>
+    <color name="colorPrimaryVariant">#002E26</color>
+    <color name="colorOnPrimary">#E0F2F1</color>
+
+    <color name="colorSecondary">#005B4F</color>
+    <color name="colorSecondaryVariant">#003D33</color>
+    <color name="colorOnSecondary">#E0F2F1</color>
+
+    <!-- Text & background -->
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="textColorSecondary">#B3FFFFFF</color>
+    <color name="windowBackground">#121212</color>
+    <color name="iconTint">#B3FFFFFF</color>
+</resources>
