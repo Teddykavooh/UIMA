@@ -50,7 +50,7 @@ public class Patient {
         this.dob = dob;
     }
 
-    public String setGender() {
+    public String getGender() {
         return gender;
     }
     public void setGender(String gender) {
