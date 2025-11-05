@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
+
+    <!-- AppBar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:title="Patient Listing"
+        app:titleTextColor="@color/colorOnPrimary"
+        app:navigationIcon="@drawable/baseline_list_alt_24">
+
+        <!--   Add Patient Button     -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addPatientButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Register Patient"
+            android:textColor="@color/colorOnPrimary"
+            app:strokeColor="@color/colorOnPrimary"
+            android:paddingHorizontal="5dp"
+            android:layout_marginEnd="10dp"/>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <!-- Provide padding to the content   -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Date -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Table Header Row -->
+        <LinearLayout
+            android:id="@+id/headerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryVariant"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/headerPatientName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="Patient Name"
+                android:textColor="@color/colorOnPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/headerAge"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Age"
+                android:textColor="@color/colorOnPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/headerBmi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="BMI"
+                android:textColor="@color/colorOnPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- RecyclerView for patient list -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPatients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:layout_margin="10dp"
+        android:padding="8dp" />
+
+</LinearLayout>

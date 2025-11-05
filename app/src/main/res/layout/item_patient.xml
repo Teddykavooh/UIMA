@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical">
+
+    <!-- Patient Name -->
+    <TextView
+        android:id="@+id/tvPatientName"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="wrap_content"
+        android:text="John Mdoe"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Age -->
+    <TextView
+        android:id="@+id/tvAge"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="21"
+        android:textColor="@color/textColorSecondary"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <!-- BMI Status -->
+    <TextView
+        android:id="@+id/tvBMIStatus"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:text="Normal"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+</LinearLayout>
