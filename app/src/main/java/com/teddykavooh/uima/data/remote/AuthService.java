@@ -13,6 +13,6 @@ public interface AuthService {
     @POST("user/signup")
     Call<SignupResponse> signup(@Body User user);
 
-    @POST("user/login")
+    @POST("user/signin")
     Call<LoginResponse> login(@Body User user);
 }
