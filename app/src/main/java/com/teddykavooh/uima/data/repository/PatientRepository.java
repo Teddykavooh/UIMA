@@ -32,7 +32,6 @@ public class PatientRepository {
         AppDatabase uimaDatabase = AppDatabase.getInstance(context);
         this.patientDao = uimaDatabase.patientDao();
         this.patientService = patientService;
-        // Rely back message after sync
         this.context = context.getApplicationContext();
     }
 
@@ -43,14 +42,13 @@ public class PatientRepository {
         }).start();
     }
 
+    // Get a patient locally
     public Patient getPatientLocal(String uniqueId) {
         return patientDao.getPatient(uniqueId);
     }
-
     public List<Patient> getAllPatientsLocal() {
         return patientDao.getAllPatients();
     }
-
 
     public List<Patient> getUnsyncedPatients() {
         return patientDao.getUnsyncedPatients();
@@ -60,6 +58,13 @@ public class PatientRepository {
     public void syncPatients() {
         new Thread(() -> {
             List<Patient> unsyncedPatients = getUnsyncedPatients();
+            if (unsyncedPatients.isEmpty()) {
+                // If there's nothing to sync relay toast
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
+                        "No data to sync", Toast.LENGTH_SHORT).show());
+                return;
+            }
+
             for (Patient patient : unsyncedPatients) {
                 patientService.registerPatient(patient).enqueue(new Callback<PatientRegisterResponse>() {
                     @Override
@@ -68,12 +73,15 @@ public class PatientRepository {
                             // Change the status of the patient to synced
                             patient.setSynced(true);
                             new Thread(() -> patientDao.update(patient)).start();
+
+                            // Show Toast after successful sync
+                            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
+                                    "Patient synced: " + patient.getFirstName(), Toast.LENGTH_SHORT).show());
+                        } else {
+                            // Handle non-successful responses
+                            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
+                                    "Sync failed for " + patient.getFirstName() + ": " + response.message(), Toast.LENGTH_SHORT).show());
                         }
-
-                        // Show Toast after each sync
-                        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
-                                "Patient synced: " + patient.getFirstName(), Toast.LENGTH_SHORT).show());
-
                     }
 
                     @Override
@@ -97,26 +105,8 @@ public class PatientRepository {
         call.enqueue(callback);
     }
 
-    /*public void registerPatient(Patient patient, Callback<PatientRegisterResponse> callback) {
-        Call<PatientRegisterResponse> call = patientService.registerPatient(patient);
-        call.enqueue(callback);
-    }*/
-
     public void getAllPatients(Callback<PatientsListResponse> callback) {
         Call<PatientsListResponse> call = patientService.getAllPatients();
         call.enqueue(callback);
     }
-
-    // TODO: Add other CRUD operations as needed
-//    public void updatePatient(Patient patient) {
-//        patientService.updatePatient(patient);
-//    }
-//
-//    public void deletePatient(String patientId) {
-//        patientService.deletePatient(patientId);
-//    }
-//
-//    public List<Patient> searchPatients(String query) {
-//        return patientService.searchPatients(query);
-//    }
 }
