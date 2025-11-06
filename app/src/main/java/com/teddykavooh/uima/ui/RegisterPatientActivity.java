@@ -1,6 +1,7 @@
 package com.teddykavooh.uima.ui;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.teddykavooh.uima.R;
 import com.teddykavooh.uima.data.remote.ApiClient;
 import com.teddykavooh.uima.data.remote.PatientService;
 import com.teddykavooh.uima.data.repository.PatientRepository;
+import com.teddykavooh.uima.domain.PatientManager;
 import com.teddykavooh.uima.model.Patient;
 
 import java.text.SimpleDateFormat;
@@ -28,7 +30,10 @@ public class RegisterPatientActivity extends AppCompatActivity {
     private MaterialButton btnSave, btnClose, btnSync;
     private PatientRepository patientRepository;
     private final Calendar calender = Calendar.getInstance();
-    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd",
+            Locale.getDefault());
+    private PatientManager patientManager;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +75,20 @@ public class RegisterPatientActivity extends AppCompatActivity {
             savePatient();
         });
 
+        context = this.getApplicationContext();
+
+        // Init PatientManager
+        PatientService service = ApiClient.getRetrofitInstance().create(PatientService.class);
+        patientManager = new PatientManager(getApplicationContext(), service);
+
         // TODO: Sync Button
         btnSync.setOnClickListener(v -> {
             Toast.makeText(this, "Syncing patients ...", Toast.LENGTH_LONG).show();
-            new Thread(() -> patientRepository.syncPatients()).start();
+            new Thread(() -> {
+                patientRepository.syncPatients();
+                runOnUiThread(() -> Toast.makeText(this, "Sync process initiated",
+                        Toast.LENGTH_SHORT).show());
+            }).start();
         });
     }
 
@@ -104,7 +119,8 @@ public class RegisterPatientActivity extends AppCompatActivity {
         String regDate = etRegDate.getText().toString().trim();
 
         // Validate data
-        if (firstName.isEmpty() || lastName.isEmpty() || dob.isEmpty() || gender.isEmpty() || regDate.isEmpty() || uniqueID.isEmpty()) {
+        if (firstName.isEmpty() || lastName.isEmpty() || dob.isEmpty() || gender.isEmpty() ||
+                regDate.isEmpty() || uniqueID.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -113,8 +129,12 @@ public class RegisterPatientActivity extends AppCompatActivity {
         Patient patient = new Patient(uniqueID, firstName, lastName, dob, gender, regDate);
 
         // Save locally
-        new Thread(() -> patientRepository.saveLocal(patient)).start();
-        Toast.makeText(this, "Patient saved successfully", Toast.LENGTH_SHORT).show();
-        finish();
+        new Thread(() -> {
+            patientManager.registerPatientLocal(uniqueID, firstName, lastName, dob, gender, regDate);
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Patient saved locally!", Toast.LENGTH_SHORT).show();
+                finish();
+            });
+        }).start();
     }
 }

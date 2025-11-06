@@ -43,6 +43,15 @@ public class PatientRepository {
         }).start();
     }
 
+    public Patient getPatientLocal(String uniqueId) {
+        return patientDao.getPatient(uniqueId);
+    }
+
+    public List<Patient> getAllPatientsLocal() {
+        return patientDao.getAllPatients();
+    }
+
+
     public List<Patient> getUnsyncedPatients() {
         return patientDao.getUnsyncedPatients();
     }
@@ -56,13 +65,14 @@ public class PatientRepository {
                     @Override
                     public void onResponse(@NonNull Call<PatientRegisterResponse> call, @NonNull Response<PatientRegisterResponse> response) {
                         if (response.isSuccessful()) {
+                            // Change the status of the patient to synced
                             patient.setSynced(true);
                             new Thread(() -> patientDao.update(patient)).start();
                         }
 
                         // Show Toast after each sync
                         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
-                                "Patient synced", Toast.LENGTH_SHORT).show());
+                                "Patient synced: " + patient.getFirstName(), Toast.LENGTH_SHORT).show());
 
                     }
 
@@ -73,7 +83,7 @@ public class PatientRepository {
 
                         // Show Toast After failed sync
                         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
-                                "Patient sync failed", Toast.LENGTH_SHORT).show());
+                                "Patient sync failed: " + patient.getFirstName(), Toast.LENGTH_SHORT).show());
                     }
                 });
             }
@@ -82,17 +92,17 @@ public class PatientRepository {
 
     // Remote operations
 
-    public void getPatient(Patient patient, Callback<PatientViewResponse> callback) {
-        Call<PatientViewResponse> call = patientService.getPatient(patient.getUniqueId());
+    public void getPatient(String uniqueId, Callback<PatientViewResponse> callback) {
+        Call<PatientViewResponse> call = patientService.getPatient(uniqueId);
         call.enqueue(callback);
     }
 
-    public void registerPatient(Patient patient, Callback<PatientRegisterResponse> callback) {
+    /*public void registerPatient(Patient patient, Callback<PatientRegisterResponse> callback) {
         Call<PatientRegisterResponse> call = patientService.registerPatient(patient);
         call.enqueue(callback);
-    }
+    }*/
 
-    public void getAllPatients(Patient patient, Callback<PatientsListResponse> callback) {
+    public void getAllPatients(Callback<PatientsListResponse> callback) {
         Call<PatientsListResponse> call = patientService.getAllPatients();
         call.enqueue(callback);
     }

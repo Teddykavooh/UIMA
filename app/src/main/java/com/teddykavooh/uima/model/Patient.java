@@ -4,25 +4,35 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.Expose;
+
 import java.text.DateFormat;
 
 @Entity(tableName = "patients")
 public class Patient {
     @PrimaryKey
     @NonNull
+    @Expose
     private String uniqueId;
+    @Expose
     private String firstName;
+    @Expose
     private String lastName;
+    @Expose
     private String dob;
+    @Expose
     private String gender;
+    @Expose
     private String reg_date;
 
-    // Sync tracker
+    // Sync tracker: restrict from sync
+    @Expose(serialize = false, deserialize = false)
     private boolean synced;
 
 
     // Constructor
-    public Patient(@NonNull String uniqueId, String firstName, String lastName, String dob, String gender, String reg_date, boolean synced) {
+    public Patient(@NonNull String uniqueId, String firstName, String lastName, String dob,
+                   String gender, String reg_date) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.uniqueId = uniqueId;
