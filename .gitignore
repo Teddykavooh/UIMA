@@ -14,3 +14,7 @@
 .cxx
 local.properties
 .idea
+
+# Temporary for debug purposes
+/app/src/main/java/com/teddykavoog/uima/ui/AuthActivity.java
+/app/src/main/res/layout/activity_auth.xml

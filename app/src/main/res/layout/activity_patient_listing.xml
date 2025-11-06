@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingHorizontal="2.5dp">
 
         <!--   Add Patient Button     -->
         <com.google.android.material.button.MaterialButton
@@ -31,7 +32,8 @@
             android:layout_marginBottom="8dp"
             android:text="Register Patient"
             app:icon="@drawable/outline_contacts_product_24"
-            android:layout_weight="0.6" />
+            android:layout_weight="0.5"
+            android:layout_marginEnd="4dp" />
 
         <!-- Sync Button -->
         <com.google.android.material.button.MaterialButton
@@ -42,7 +44,7 @@
             android:layout_marginBottom="8dp"
             android:text="Sync Data"
             app:icon="@drawable/outline_cloud_sync_24"
-            android:layout_weight="0.4"/>
+            android:layout_weight="0.3"/>
 
     </LinearLayout>
 
