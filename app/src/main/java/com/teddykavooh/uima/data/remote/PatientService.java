@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface PatientService {
     @POST("patients/register")
@@ -18,5 +19,5 @@ public interface PatientService {
     Call<PatientsListResponse> getAllPatients();
 
     @GET("patients/show/{id}")
-    Call<PatientViewResponse> getPatient(@Body String id);
+    Call<PatientViewResponse> getPatient(@Path("id") String id);
 }

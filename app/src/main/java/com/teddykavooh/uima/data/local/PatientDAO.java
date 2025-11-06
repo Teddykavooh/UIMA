@@ -19,19 +19,19 @@ public interface PatientDAO {
     List<Patient> getAllPatients();
 
     @Query("SELECT * FROM patients WHERE uniqueId = :id")
-    Patient getPatient(int id);
+    Patient getPatient(String id);
 
     // Get unsynced patients
     @Query("SELECT * FROM patients WHERE synced = 0")
     List<Patient> getUnsyncedPatients();
 
+    @Update
+    void update(Patient patient);
+
 
     // TODO
     @Query("SELECT * FROM patients WHERE firstName = :name")
     Patient getByName(String name);
-
-    @Update
-    void update(Patient patient);
 
     @Delete
     void delete(Patient patient);
