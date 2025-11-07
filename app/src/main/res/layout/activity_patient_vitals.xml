@@ -25,7 +25,8 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <!-- Visit Date -->
             <com.google.android.material.textfield.TextInputLayout
@@ -96,13 +97,27 @@
                     android:enabled="false" /> <!-- auto-populated -->
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Vitals ID -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Vitals ID">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVitalsID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:enabled="false" /> <!-- auto-populated -->
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!-- Buttons -->
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:weightSum="2">
+                android:weightSum="3">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnClose"
@@ -121,6 +136,16 @@
                     android:text="Save"
                     android:backgroundTint="?attr/colorPrimary"
                     android:textColor="?attr/colorOnPrimary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSync"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Sync"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:icon="@drawable/outline_cloud_sync_24"
+                    android:textColor="?attr/colorPrimary" />
 
             </LinearLayout>
 

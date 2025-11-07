@@ -6,46 +6,88 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.teddykavooh.uima.R;
+import com.teddykavooh.uima.domain.BmiCalculator;
 import com.teddykavooh.uima.model.Patient;
+import com.teddykavooh.uima.model.PatientWithVitals;
+import com.teddykavooh.uima.model.Vitals;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
-// Populate RecycleViews with Patient data
-public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientViewHolder> {
-    private List<Patient> patients;
+// Use ListAdapter for more efficient list updates
+public class PatientAdapter extends ListAdapter<PatientWithVitals, PatientAdapter.PatientViewHolder> {
 
-    public PatientAdapter(List<Patient> patients) {
-        this.patients = patients;
+    public PatientAdapter() {
+        super(DIFF_CALLBACK);
     }
+
+    private static final DiffUtil.ItemCallback<PatientWithVitals> DIFF_CALLBACK = new DiffUtil.ItemCallback<PatientWithVitals>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull PatientWithVitals oldItem, @NonNull PatientWithVitals newItem) {
+            // Use direct field access
+            return oldItem.patient.getUniqueId().equals(newItem.patient.getUniqueId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull PatientWithVitals oldItem, @NonNull PatientWithVitals newItem) {
+            // This is a simplified check. For full robustness, Patient and Vitals should have equals() implemented.
+            return Objects.equals(oldItem.patient, newItem.patient) &&
+                   Objects.equals(oldItem.vitals, newItem.vitals);
+        }
+    };
 
     @NonNull
     @Override
-    public PatientViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_patient, parent,
-                false);
+    public PatientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_patient, parent, false);
         return new PatientViewHolder(view);
-
     }
 
     @Override
-    public void onBindViewHolder(PatientViewHolder holder, int position) {
-        Patient patient = patients.get(position);
+    public void onBindViewHolder(@NonNull PatientViewHolder holder, int position) {
+        PatientWithVitals data = getItem(position);
+        if (data == null || data.patient == null) {
+            return; // Should not happen with ListAdapter, but a good safety check
+        }
+
+        Patient patient = data.patient;
+        List<Vitals> vitalsList = data.vitals;
+
+        // Find the most recent vitals from the list by comparing the visit_date string.
+        // Because the date is in YYYY-MM-DD format, a standard string comparison works correctly.
+        Vitals latestVitals = null;
+        if (vitalsList != null && !vitalsList.isEmpty()) {
+            latestVitals = vitalsList.stream()
+                    .max(Comparator.comparing(Vitals::getVisit_date))
+                    .orElse(null);
+        }
+
+        // Bind data to the views
         holder.tvName.setText(patient.getFirstName() + " " + patient.getLastName());
-        holder.tvAge.setText("DOB: " + patient.getDob());
-        holder.tvsStatus.setText("Gender: " + patient.getGender());
-    }
+        holder.tvAge.setText(String.valueOf(BmiCalculator.calculateAge(patient.getDob())));
 
-    @Override
-    public int getItemCount() {
-        return patients.size();
-    }
+        // Use the latestVitals for the BMI calculation
+        if (latestVitals != null && latestVitals.getWeight() != null && !latestVitals.getWeight().isEmpty() && latestVitals.getHeight() != null && !latestVitals.getHeight().isEmpty()) {
+            try {
+                double weightKg = Double.parseDouble(latestVitals.getWeight());
+                double heightM = Double.parseDouble(latestVitals.getHeight());
 
-    public void setPatients(List<Patient> patients) {
-        this.patients = patients;
-        notifyDataSetChanged();
+                double bmi = BmiCalculator.calculate(weightKg, heightM);
+
+                holder.tvsStatus.setText(String.format("%.1f", bmi));
+            } catch (NumberFormatException e) {
+                holder.tvsStatus.setText("N/A");
+                e.printStackTrace();
+            }
+        } else {
+            holder.tvsStatus.setText("No Vitals");
+        }
     }
 
     public static class PatientViewHolder extends RecyclerView.ViewHolder {
@@ -57,6 +99,5 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientV
             tvAge = itemView.findViewById(R.id.tvAge);
             tvsStatus = itemView.findViewById(R.id.tvBMIStatus);
         }
-
     }
 }

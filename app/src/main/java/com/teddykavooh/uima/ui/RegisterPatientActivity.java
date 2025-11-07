@@ -40,10 +40,13 @@ public class RegisterPatientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_form);
 
-        // Init Retrofit Repository
-        patientRepository = new PatientRepository(getApplicationContext(), ApiClient.getRetrofitInstance().create(PatientService.class));
+        context = getApplicationContext();
 
-        // Init Views
+
+        // Init Patient Repository
+        patientRepository = new PatientRepository(context, ApiClient.getRetrofitInstance().create(PatientService.class));
+
+        // Views binds
         etFirstName = findViewById(R.id.etFirstName);
         etLastName = findViewById(R.id.etLastName);
         etUniqueID = findViewById(R.id.etUnique);
@@ -126,7 +129,7 @@ public class RegisterPatientActivity extends AppCompatActivity {
         }
 
         // Populate Patient Object
-        Patient patient = new Patient(uniqueID, firstName, lastName, dob, gender, regDate);
+        // Patient patient = new Patient(uniqueID, firstName, lastName, dob, gender, regDate);
 
         // Save locally
         new Thread(() -> {

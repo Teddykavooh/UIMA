@@ -13,6 +13,7 @@ import com.teddykavooh.uima.data.remote.PatientService;
 import com.teddykavooh.uima.model.Patient;
 import com.teddykavooh.uima.model.PatientRegisterResponse;
 import com.teddykavooh.uima.model.PatientViewResponse;
+import com.teddykavooh.uima.model.PatientWithVitals;
 import com.teddykavooh.uima.model.PatientsListResponse;
 
 import java.util.List;
@@ -25,8 +26,6 @@ public class PatientRepository {
     private final PatientService patientService;
     private final PatientDAO patientDao;
     private final Context context;
-
-
 
     public PatientRepository(Context context, PatientService patientService) {
         AppDatabase uimaDatabase = AppDatabase.getInstance(context);
@@ -42,12 +41,16 @@ public class PatientRepository {
         }).start();
     }
 
-    // Get a patient locally
     public Patient getPatientLocal(String uniqueId) {
         return patientDao.getPatient(uniqueId);
     }
+
     public List<Patient> getAllPatientsLocal() {
         return patientDao.getAllPatients();
+    }
+
+    public List<PatientWithVitals> getPatientsWithVitals() {
+        return patientDao.getPatientsWithVitals();
     }
 
     public List<Patient> getUnsyncedPatients() {
@@ -59,9 +62,7 @@ public class PatientRepository {
         new Thread(() -> {
             List<Patient> unsyncedPatients = getUnsyncedPatients();
             if (unsyncedPatients.isEmpty()) {
-                // If there's nothing to sync relay toast
-                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
-                        "No data to sync", Toast.LENGTH_SHORT).show());
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context, "No data to sync", Toast.LENGTH_SHORT).show());
                 return;
             }
 
@@ -70,15 +71,12 @@ public class PatientRepository {
                     @Override
                     public void onResponse(@NonNull Call<PatientRegisterResponse> call, @NonNull Response<PatientRegisterResponse> response) {
                         if (response.isSuccessful()) {
-                            // Change the status of the patient to synced
                             patient.setSynced(true);
                             new Thread(() -> patientDao.update(patient)).start();
 
-                            // Show Toast after successful sync
                             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
                                     "Patient synced: " + patient.getFirstName(), Toast.LENGTH_SHORT).show());
                         } else {
-                            // Handle non-successful responses
                             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
                                     "Sync failed for " + patient.getFirstName() + ": " + response.message(), Toast.LENGTH_SHORT).show());
                         }
@@ -86,10 +84,7 @@ public class PatientRepository {
 
                     @Override
                     public void onFailure(Call<PatientRegisterResponse> call, Throwable t) {
-                        // Handle failure
                         t.printStackTrace();
-
-                        // Show Toast After failed sync
                         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context,
                                 "Patient sync failed: " + patient.getFirstName(), Toast.LENGTH_SHORT).show());
                     }
@@ -99,7 +94,6 @@ public class PatientRepository {
     }
 
     // Remote operations
-
     public void getPatient(String uniqueId, Callback<PatientViewResponse> callback) {
         Call<PatientViewResponse> call = patientService.getPatient(uniqueId);
         call.enqueue(callback);

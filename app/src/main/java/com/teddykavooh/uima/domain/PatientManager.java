@@ -7,9 +7,9 @@ import com.teddykavooh.uima.data.repository.PatientRepository;
 import com.teddykavooh.uima.model.Patient;
 import com.teddykavooh.uima.model.PatientRegisterResponse;
 import com.teddykavooh.uima.model.PatientViewResponse;
+import com.teddykavooh.uima.model.PatientWithVitals;
 import com.teddykavooh.uima.model.PatientsListResponse;
 
-import java.text.DateFormat;
 import java.util.List;
 
 import retrofit2.Callback;
@@ -30,6 +30,11 @@ public class PatientManager {
 
     public Patient getPatientLocal(String uniqueId) {
         return repository.getPatientLocal(uniqueId);
+    }
+    
+    // Get patients with vital
+    public List<PatientWithVitals> getPatientsWithVitals() {
+        return repository.getPatientsWithVitals();
     }
 
     public List<Patient> getAllPatientsLocal() {

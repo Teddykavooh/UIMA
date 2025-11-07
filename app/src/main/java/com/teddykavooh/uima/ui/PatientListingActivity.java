@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,9 +13,8 @@ import com.teddykavooh.uima.R;
 import com.teddykavooh.uima.data.remote.ApiClient;
 import com.teddykavooh.uima.data.remote.PatientService;
 import com.teddykavooh.uima.domain.PatientManager;
-import com.teddykavooh.uima.model.Patient;
+import com.teddykavooh.uima.model.PatientWithVitals;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,12 +42,12 @@ public class PatientListingActivity extends AppCompatActivity {
 
         // Setup Local RecyclerView
         rvLocalPatients.setLayoutManager(new LinearLayoutManager(this));
-        localPatientAdapter = new PatientAdapter(new ArrayList<>());
+        localPatientAdapter = new PatientAdapter();
         rvLocalPatients.setAdapter(localPatientAdapter);
 
         // Setup Remote RecyclerView
         rvRemotePatients.setLayoutManager(new LinearLayoutManager(this));
-        remotePatientAdapter = new PatientAdapter(new ArrayList<>());
+        remotePatientAdapter = new PatientAdapter();
         rvRemotePatients.setAdapter(remotePatientAdapter);
 
         // Use PatientManager
@@ -67,17 +65,18 @@ public class PatientListingActivity extends AppCompatActivity {
     }
 
     // Load patient from local
-    private void loadLocalPatients() {
+    private void loadPatients() {
         new Thread(() -> {
-            List<Patient> allPatients = patientManager.getAllPatientsLocal();
+            List<PatientWithVitals> allPatients = patientManager.getPatientsWithVitals();
 
-            // Separate patients into synced and unsynced lists
-            List<Patient> localPatients = allPatients.stream().filter(p -> !p.isSynced()).collect(Collectors.toList());
-            List<Patient> remotePatients = allPatients.stream().filter(Patient::isSynced).collect(Collectors.toList());
+            // Separate patients into synced and unsynced lists using direct field access
+            List<PatientWithVitals> localPatients = allPatients.stream().filter(p -> !p.patient.isSynced()).collect(Collectors.toList());
+            List<PatientWithVitals> remotePatients = allPatients.stream().filter(p -> p.patient.isSynced()).collect(Collectors.toList());
 
             runOnUiThread(() -> {
-                localPatientAdapter.setPatients(localPatients);
-                remotePatientAdapter.setPatients(remotePatients);
+                // Use submitList for the more efficient ListAdapter
+                localPatientAdapter.submitList(localPatients);
+                remotePatientAdapter.submitList(remotePatients);
             });
             // Logger
             Log.d(TAG, "loadLocalPatients: Local=" + localPatients.size() + ", Remote=" + remotePatients.size());
@@ -88,6 +87,6 @@ public class PatientListingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadLocalPatients();
+        loadPatients();
     }
 }
