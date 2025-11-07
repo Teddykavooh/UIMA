@@ -1,6 +1,7 @@
 package com.teddykavooh.uima.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -10,9 +11,10 @@ import java.text.DateFormat;
 
 @Entity(tableName = "patients")
 public class Patient {
+    // TODO: Remove quick fix for uniqueId
     @PrimaryKey
     @NonNull
-    @Expose
+    @Expose(serialize = false, deserialize = false)
     private String uniqueId;
     @Expose
     private String firstName;

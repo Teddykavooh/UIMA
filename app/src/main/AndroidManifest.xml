@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".ui.PatientListingActivity" />
         <activity android:name=".ui.RegisterPatientActivity" />
+        <activity android:name=".ui.PatientDetailActivity" />
+        <activity android:name=".ui.AddVitalsActivity" />
     </application>
 
 </manifest>

@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingHorizontal="2.5dp">
 
         <!--   Add Patient Button     -->
         <com.google.android.material.button.MaterialButton
@@ -29,9 +30,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Register Patient"
+            android:text="Register"
             app:icon="@drawable/outline_contacts_product_24"
-            android:layout_weight="0.6" />
+            android:layout_weight="0.5"
+            android:layout_marginEnd="4dp" />
 
         <!-- Sync Button -->
         <com.google.android.material.button.MaterialButton
@@ -42,7 +44,7 @@
             android:layout_marginBottom="8dp"
             android:text="Sync Data"
             app:icon="@drawable/outline_cloud_sync_24"
-            android:layout_weight="0.4"/>
+            android:layout_weight="0.5"/>
 
     </LinearLayout>
 
@@ -54,9 +56,52 @@
         android:textSize="15sp"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:padding="15dp"
+        android:padding="10dp"
         android:textColor="@color/colorOnPrimary"
         android:background="@color/colorPrimary"/>
+
+    <!-- Table Header Row -->
+    <LinearLayout
+        android:id="@+id/headerRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#DDD"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/headerPatientName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="start"
+            android:text="Patient Name"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/headerAge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Age"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/headerBmi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="BMI"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- RecyclerView for local patient list -->
     <androidx.recyclerview.widget.RecyclerView
@@ -76,9 +121,52 @@
         android:textSize="15sp"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:padding="15dp"
+        android:padding="10dp"
         android:textColor="@color/colorOnPrimary"
         android:background="@color/colorPrimary"/>
+
+    <!-- Table Header Row -->
+    <LinearLayout
+        android:id="@+id/headerRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#DDD"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/headerPatientName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="start"
+            android:text="Patient Name"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/headerAge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Age"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/headerBmi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="BMI"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- RecyclerView for remote patient list -->
     <androidx.recyclerview.widget.RecyclerView
