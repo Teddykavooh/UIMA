@@ -1,5 +1,6 @@
 package com.teddykavooh.uima.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +34,10 @@ public class AddVitalsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_vitals);
 
+        // Retrieve the patient ID passed from previous activity
+        Intent intent = getIntent();
+        String patientId = intent.getStringExtra("patientId");
+
         // Init Vitals Repository
         vitalsRepository = new VitalsRepository(this,
                 ApiClient.getRetrofitInstance().create(VitalsService.class));
@@ -47,6 +52,9 @@ public class AddVitalsActivity extends AppCompatActivity {
         save = findViewById(R.id.btnSave);
         close = findViewById(R.id.btnClose);
         sync = findViewById(R.id.btnSync);
+
+        // Populate the patient ID field
+        patientID.setText(patientId);
 
         // Make BMI field non-editable as it is a calculated value
         bmi.setFocusable(false);
@@ -115,6 +123,9 @@ public class AddVitalsActivity extends AppCompatActivity {
         String heightStr = this.height.getText().toString();
         String weightStr = this.weight.getText().toString();
         String patientIDStr = this.patientID.getText().toString();
+        // Set default value
+        String patient_id_remote_str = "NONE YET";
+
 
         // Validate data
         if (visitDateStr.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty() || patientIDStr.isEmpty()) {
@@ -123,7 +134,8 @@ public class AddVitalsActivity extends AppCompatActivity {
         }
 
         new Thread(() -> {
-            vitalsManager.addVitals(visitDateStr, heightStr, weightStr, patientIDStr);
+            vitalsManager.addVitals(visitDateStr, heightStr, weightStr, patientIDStr,
+                    patient_id_remote_str);
             runOnUiThread(() -> {
                 Toast.makeText(this, "Vitals saved locally", Toast.LENGTH_SHORT).show();
                 finish();

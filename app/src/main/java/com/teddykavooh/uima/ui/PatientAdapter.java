@@ -1,8 +1,11 @@
 package com.teddykavooh.uima.ui;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,7 +56,7 @@ public class PatientAdapter extends ListAdapter<PatientWithVitals, PatientAdapte
     public void onBindViewHolder(@NonNull PatientViewHolder holder, int position) {
         PatientWithVitals data = getItem(position);
         if (data == null || data.patient == null) {
-            return; // Should not happen with ListAdapter, but a good safety check
+            return;
         }
 
         Patient patient = data.patient;
@@ -73,7 +76,9 @@ public class PatientAdapter extends ListAdapter<PatientWithVitals, PatientAdapte
         holder.tvAge.setText(String.valueOf(BmiCalculator.calculateAge(patient.getDob())));
 
         // Use the latestVitals for the BMI calculation
-        if (latestVitals != null && latestVitals.getWeight() != null && !latestVitals.getWeight().isEmpty() && latestVitals.getHeight() != null && !latestVitals.getHeight().isEmpty()) {
+        if (latestVitals != null && latestVitals.getWeight() != null &&
+                !latestVitals.getWeight().isEmpty() && latestVitals.getHeight() !=
+                null && !latestVitals.getHeight().isEmpty()) {
             try {
                 double weightKg = Double.parseDouble(latestVitals.getWeight());
                 double heightM = Double.parseDouble(latestVitals.getHeight());
@@ -88,16 +93,32 @@ public class PatientAdapter extends ListAdapter<PatientWithVitals, PatientAdapte
         } else {
             holder.tvsStatus.setText("No Vitals");
         }
+
+        // Icon to lead to vitals
+        holder.ivVitals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the click event here: direct to add vitals, carry patient id
+                Intent intent = new Intent(v.getContext(), AddVitalsActivity.class);
+                intent.putExtra("patientId", patient.getUniqueId());
+                // Add logger
+                Log.d("PatientAdapter", "Patient ID: " + patient.getUniqueId());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     public static class PatientViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvName, tvAge, tvsStatus;
+        private final ImageView ivVitals;
 
         public PatientViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvPatientName);
             tvAge = itemView.findViewById(R.id.tvAge);
             tvsStatus = itemView.findViewById(R.id.tvBMIStatus);
+            ivVitals = itemView.findViewById(R.id.ivAddVitals);
+
         }
     }
 }
