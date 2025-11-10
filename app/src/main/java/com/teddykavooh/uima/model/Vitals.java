@@ -5,33 +5,39 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "vitals")
 public class Vitals {
     @PrimaryKey
-    @Expose
+    @Expose(serialize = false, deserialize = false)
     @NonNull
     private String patient_id;
-
+    @Expose
+    @NonNull
+    @SerializedName("patient_id") // As per the API
+    private String patient_id_remote;
     @Expose
     private String height, weight, bmi, visit_date;
     @Expose(serialize = false, deserialize = false)
     private boolean synced;
 
     // Constructor
-    public Vitals(String visitDate, String height, String weight, String bmi, String patient_id) {
+    public Vitals(String visitDate, String height, String weight, String bmi, String patient_id,
+                  @NonNull String patient_id_remote) {
         this.visit_date = visitDate;
         this.height = height;
         this.weight = weight;
         this.bmi = bmi;
         this.patient_id = patient_id;
+        this.patient_id_remote = patient_id_remote;
         this.synced = false;
 
     }
 
     // Default Constructor
     public Vitals() {
-
+        patient_id_remote = "";
     }
 
     // Getters and Setters
@@ -93,6 +99,14 @@ public class Vitals {
         this.synced = synced;
     }
 
+    @NonNull
+    public String getPatient_id_remote() {
+        return patient_id_remote;
+    }
+
+    public void setPatient_id_remote(@NonNull String patient_id_remote) {
+        this.patient_id_remote = patient_id_remote;
+    }
 }
 
 /*

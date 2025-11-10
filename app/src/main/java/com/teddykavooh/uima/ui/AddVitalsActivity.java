@@ -115,6 +115,9 @@ public class AddVitalsActivity extends AppCompatActivity {
         String heightStr = this.height.getText().toString();
         String weightStr = this.weight.getText().toString();
         String patientIDStr = this.patientID.getText().toString();
+        // Set default value
+        String patient_id_remote_str = "NONE YET";
+
 
         // Validate data
         if (visitDateStr.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty() || patientIDStr.isEmpty()) {
@@ -123,7 +126,8 @@ public class AddVitalsActivity extends AppCompatActivity {
         }
 
         new Thread(() -> {
-            vitalsManager.addVitals(visitDateStr, heightStr, weightStr, patientIDStr);
+            vitalsManager.addVitals(visitDateStr, heightStr, weightStr, patientIDStr,
+                    patient_id_remote_str);
             runOnUiThread(() -> {
                 Toast.makeText(this, "Vitals saved locally", Toast.LENGTH_SHORT).show();
                 finish();

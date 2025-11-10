@@ -3,6 +3,7 @@ package com.teddykavooh.uima.data.repository;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.teddykavooh.uima.data.local.AppDatabase;
@@ -49,41 +50,46 @@ public class VitalsRepository {
                 });
                 return;
             }
+            // TODO: Tie patient_id from remote before syncing
+            // Add loggers
+            Log.d("VitalsRepository", "Syncing " + unsyncedVitals.size() + " vitals");
             // Sync data
             for (Vitals vitals : unsyncedVitals) {
-                vitalsService.addVitals(vitals).enqueue(new Callback<AddVitalsResponse>() {
-                    @Override
-                    public void onResponse(Call<AddVitalsResponse> call, Response<AddVitalsResponse> response) {
-                        // Change sync status
-                        if (response.isSuccessful()) {
-                            vitals.setSynced(true);
-                            new Thread(() -> {
-                                vitalsDao.update(vitals);
-                            }).start();
-
-                            // Relay toast
-                            new Handler(Looper.getMainLooper()).post(() -> {
-                                Toast.makeText(context, "Vitals synced successfully", Toast.LENGTH_SHORT).show();
-                            });
-                        } else {
-                            // Handle error
-                            new Handler(Looper.getMainLooper()).post(() -> {
-                                Toast.makeText(context, "Error syncing vitals", Toast.LENGTH_SHORT).show();
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AddVitalsResponse> call, Throwable t) {
-                        // Handle failure
-                        t.printStackTrace();
-
-                        // Relay toast
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            Toast.makeText(context, "Error syncing vitals", Toast.LENGTH_SHORT).show();
-                        });
-                    }
-                });
+                // Add logger
+                Log.d("VitalsRepository", "Syncing vitals: " + vitals.toString());
+//                vitalsService.addVitals(vitals).enqueue(new Callback<AddVitalsResponse>() {
+//                    @Override
+//                    public void onResponse(Call<AddVitalsResponse> call, Response<AddVitalsResponse> response) {
+//                        // Change sync status
+//                        if (response.isSuccessful()) {
+//                            vitals.setSynced(true);
+//                            new Thread(() -> {
+//                                vitalsDao.update(vitals);
+//                            }).start();
+//
+//                            // Relay toast
+//                            new Handler(Looper.getMainLooper()).post(() -> {
+//                                Toast.makeText(context, "Vitals synced successfully", Toast.LENGTH_SHORT).show();
+//                            });
+//                        } else {
+//                            // Handle error
+//                            new Handler(Looper.getMainLooper()).post(() -> {
+//                                Toast.makeText(context, "Error syncing vitals", Toast.LENGTH_SHORT).show();
+//                            });
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<AddVitalsResponse> call, Throwable t) {
+//                        // Handle failure
+//                        t.printStackTrace();
+//
+//                        // Relay toast
+//                        new Handler(Looper.getMainLooper()).post(() -> {
+//                            Toast.makeText(context, "Error syncing vitals", Toast.LENGTH_SHORT).show();
+//                        });
+//                    }
+//                });
             }
         }).start();
     }

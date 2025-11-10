@@ -3,7 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
+    android:padding="10dp"
     android:background="?attr/selectableItemBackground"
     android:gravity="center_vertical">
 
@@ -39,5 +39,18 @@
         android:textColor="@color/textColorPrimary"
         android:textSize="14sp"
         android:gravity="center" />
+
+    <!-- Vitals Icon -->
+    <!--    android:enabled="false"-->
+    <ImageView
+        android:id="@+id/ivAddVitals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/outline_assignment_add_24"
+        android:contentDescription="Add Vitals"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@color/colorPrimary" />
 
 </LinearLayout>
