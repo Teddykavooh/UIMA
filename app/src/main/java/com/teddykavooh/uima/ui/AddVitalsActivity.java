@@ -1,5 +1,6 @@
 package com.teddykavooh.uima.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +34,10 @@ public class AddVitalsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_vitals);
 
+        // Retrieve the patient ID passed from previous activity
+        Intent intent = getIntent();
+        String patientId = intent.getStringExtra("patientId");
+
         // Init Vitals Repository
         vitalsRepository = new VitalsRepository(this,
                 ApiClient.getRetrofitInstance().create(VitalsService.class));
@@ -47,6 +52,9 @@ public class AddVitalsActivity extends AppCompatActivity {
         save = findViewById(R.id.btnSave);
         close = findViewById(R.id.btnClose);
         sync = findViewById(R.id.btnSync);
+
+        // Populate the patient ID field
+        patientID.setText(patientId);
 
         // Make BMI field non-editable as it is a calculated value
         bmi.setFocusable(false);

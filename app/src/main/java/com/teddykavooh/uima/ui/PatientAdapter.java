@@ -1,6 +1,7 @@
 package com.teddykavooh.uima.ui;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,7 @@ public class PatientAdapter extends ListAdapter<PatientWithVitals, PatientAdapte
     public void onBindViewHolder(@NonNull PatientViewHolder holder, int position) {
         PatientWithVitals data = getItem(position);
         if (data == null || data.patient == null) {
-            return; // Should not happen with ListAdapter, but a good safety check
+            return;
         }
 
         Patient patient = data.patient;
@@ -100,6 +101,8 @@ public class PatientAdapter extends ListAdapter<PatientWithVitals, PatientAdapte
                 // Handle the click event here: direct to add vitals, carry patient id
                 Intent intent = new Intent(v.getContext(), AddVitalsActivity.class);
                 intent.putExtra("patientId", patient.getUniqueId());
+                // Add logger
+                Log.d("PatientAdapter", "Patient ID: " + patient.getUniqueId());
                 v.getContext().startActivity(intent);
             }
         });
